@@ -28,7 +28,7 @@ onMounted(() => {
       <h1>IP Address Tracker</h1>
 
       <div class="search">
-        <input type="text" value="IP">
+        <input type="text" value="IP" placeholder="Search for any IP address or domain">
         <button class="btn btn-search">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14">
             <path fill="none" stroke="#FFF" stroke-width="3" d="M2 1l6 6-6 6" />
@@ -59,7 +59,7 @@ onMounted(() => {
 
     </section>
     <!-- .api-input -->
-    
+
   </div>
   <!-- .map -->
 
@@ -130,7 +130,7 @@ h1 {
 .result .item-title {
   font-size: .7rem;
   color: var(--gray_100);
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 
 @media(min-width:992px) {
@@ -158,7 +158,7 @@ h1 {
   }
 
   .result .list-item:not(:first-child) {
-    border-left: 1px solid var(--gray_100);
+    border-left: 1px solid rgba(150, 150, 150, 0.31);
   }
 }
 </style>
