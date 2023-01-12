@@ -146,16 +146,11 @@ h1 {
   .result {
     grid-auto-flow: column;
     text-align: left;
-  }
-
-
-  .result {
     padding-block: 40px;
   }
 
   .result .list-item {
     padding-inline: 30px 0;
-
   }
 
   .result .list-item:not(:first-child) {
