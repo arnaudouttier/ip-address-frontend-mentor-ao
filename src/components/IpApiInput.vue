@@ -120,7 +120,7 @@ h1 {
   background-color: #fff;
   display: grid;
   grid-auto-flow: row;
-  gap: 30px;
+  gap: 25px;
   border-radius: 20px;
   padding-block: 20px 30px;
   padding-inline: 0;
