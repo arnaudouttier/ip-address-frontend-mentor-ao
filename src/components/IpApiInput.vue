@@ -140,7 +140,7 @@ h1 {
   }
 
   .api-input {
-    top: -35%
+    top: -37%
   }
 
   .search{
