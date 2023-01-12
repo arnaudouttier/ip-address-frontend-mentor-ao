@@ -111,7 +111,7 @@ h1 {
 .search .btn-search {
   position: absolute;
   top: 0;
-  right: -2px;
+  right: -3px;
   bottom: 0;
   border-radius: 0 0.6rem 0.6rem 0;
 }
