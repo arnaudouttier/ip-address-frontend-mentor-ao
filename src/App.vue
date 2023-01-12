@@ -25,6 +25,7 @@ defineProps({
   background-image: url("assets/images/pattern-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
 }
 
 @media(min-width:992px) {
