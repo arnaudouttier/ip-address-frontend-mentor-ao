@@ -43,7 +43,7 @@ h1 {
 }
 
 h2 {
-  margin-block: 0 0.5rem;
+  margin-block: 0 0.2rem;
 }
 
 h3 {
@@ -84,6 +84,7 @@ a {
 }
 
 /* input */
+
 input {
   /* 14px @ 375px increasing to 18px @ 1170px */
   font-size: clamp(14px, calc(0.875rem + ((1vw - 3.75px) * 0.5031)), 18px);

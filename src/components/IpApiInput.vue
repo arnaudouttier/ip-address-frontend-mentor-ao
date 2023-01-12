@@ -121,7 +121,7 @@ h1 {
   display: grid;
   grid-auto-flow: row;
   gap: 25px;
-  border-radius: 20px;
+  border-radius: 1rem;
   padding-block: 20px 30px;
   padding-inline: 0;
 }
