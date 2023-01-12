@@ -68,7 +68,9 @@ onMounted(() => {
 <style scoped>
 .map {
   height: 60vh;
-  background-color: lightcoral;
+  background-image: url("../assets/images/map.png");
+  background-repeat: no-repeat;
+  background-size: cover;
   position: relative;
 }
 
@@ -108,7 +110,9 @@ h1 {
 
 .search .btn-search {
   position: absolute;
+  top: 0;
   right: -2px;
+  bottom: 0;
   border-radius: 0 0.6rem 0.6rem 0;
 }
 
