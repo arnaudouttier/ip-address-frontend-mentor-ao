@@ -101,7 +101,7 @@ h1 {
 }
 
 .search input {
-  padding: 15px;
+  padding: 20px;
   border-radius: 0.6rem;
   border: 0;
   background-color: #fff;
