@@ -85,7 +85,8 @@ a {
 
 /* input */
 input {
-  font-size: 1rem;
+  /* 14px @ 375px increasing to 18px @ 1170px */
+  font-size: clamp(14px, calc(0.875rem + ((1vw - 3.75px) * 0.5031)), 18px);
   font-weight: 500;
   color: var(--gray_200);
 }
