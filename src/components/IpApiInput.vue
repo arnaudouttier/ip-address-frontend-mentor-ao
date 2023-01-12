@@ -97,7 +97,7 @@ h1 {
   align-self: center;
   position: relative;
   width: 100%;
-  max-width: 560px;
+ 
 }
 
 .search input {
@@ -143,8 +143,13 @@ h1 {
     top: -35%
   }
 
+  .search{
+    max-width: 560px;
+  }
+
   .result {
     grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     text-align: left;
     padding-block: 40px;
   }
