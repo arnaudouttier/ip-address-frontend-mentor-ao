@@ -129,8 +129,9 @@ h1 {
 
 .result .item-title {
   font-size: .7rem;
+  font-weight: 700;
   color: var(--gray_100);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 @media(min-width:992px) {
