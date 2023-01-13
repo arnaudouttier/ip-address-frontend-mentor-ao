@@ -3,19 +3,27 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios';
 
 const response = ref(null)
+let userIp = ref(null)
+let isValidIp = true
+const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+
 
 const fetchApiGeo = async () => {
-  try {
-    response.value = await axios.get("https://geo.ipify.org/api/v2/country,city?apiKey=at_EsRwPew8lc3DElLNSTB2UbMbtP6du&ipAddress=192.169.69.2")
-  }
-  catch (err) {
-    console.error(err)
-  }
-}
 
-onMounted(() => {
-  fetchApiGeo()
-})
+  isValidIp = ipv4Regex.test(userIp.value)
+
+  if (isValidIp) {
+    try {
+      response.value = await axios.get(`https://geo.ipify.org/api/v2/country,city?apiKey=at_EsRwPew8lc3DElLNSTB2UbMbtP6du&ipAddress=${userIp.value}`)
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
+
+  userIp.value = ""
+  userIp = ref(null)
+}
 
 </script>
 
@@ -27,13 +35,19 @@ onMounted(() => {
 
       <h1>IP Address Tracker</h1>
 
+      <span class="danger" v-if="!isValidIp">Please add a valid IP address</span>
+
       <div class="search">
-        <input type="text" value="" placeholder="Search for any IP address or domain">
-        <button class="btn btn-search">
+
+        <input type="text" @keyup.enter="fetchApiGeo" v-model="userIp" :class="{ warning: !isValidIp }"
+          placeholder="Search for any IP address or domain" />
+
+        <button class="btn btn-search" :class="{ warning: !isValidIp }" @click="fetchApiGeo">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14">
             <path fill="none" stroke="#FFF" stroke-width="3" d="M2 1l6 6-6 6" />
           </svg>
         </button>
+
       </div>
       <!-- .search -->
 
@@ -66,6 +80,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* class */
+.warning {
+  outline: 2px solid #CD0404;
+}
+
 .map {
   height: 60vh;
   background-image: url("../assets/images/map.png");
@@ -92,12 +111,16 @@ h1 {
   margin-bottom: 10px;
 }
 
+.api-input .danger {
+  color: #CD0404;
+}
+
 .search {
   display: flex;
   align-self: center;
   position: relative;
   width: 100%;
- 
+
 }
 
 .search input {
@@ -126,7 +149,6 @@ h1 {
   padding-inline: 0;
 }
 
-
 .result .item-title {
   font-size: .7rem;
   font-weight: 700;
@@ -143,7 +165,7 @@ h1 {
     top: -36%
   }
 
-  .search{
+  .search {
     max-width: 560px;
   }
 
