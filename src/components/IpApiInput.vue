@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios';
+import "leaflet/dist/leaflet.css";
+import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 
 const response = ref(null)
 let userIp = ref(null)
 let isValidIp = true
-const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
-
+const zoom = ref(2)
 
 const fetchApiGeo = async () => {
 
@@ -25,11 +26,19 @@ const fetchApiGeo = async () => {
   userIp = ref(null)
 }
 
+
 </script>
 
 <template>
 
-  <div class="map">
+
+  <div id="map">
+
+    <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
+      <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
+        name="OpenStreetMap"></l-tile-layer>
+    </l-map>
+
 
     <section class="api-input">
 
@@ -75,7 +84,7 @@ const fetchApiGeo = async () => {
     <!-- .api-input -->
 
   </div>
-  <!-- .map -->
+  <!-- #map -->
 
 </template>
 
@@ -85,11 +94,8 @@ const fetchApiGeo = async () => {
   outline: 2px solid #CD0404;
 }
 
-.map {
+#map {
   height: 60vh;
-  background-image: url("../assets/images/map.png");
-  background-repeat: no-repeat;
-  background-size: cover;
   position: relative;
 }
 
@@ -103,6 +109,7 @@ const fetchApiGeo = async () => {
   top: -64%;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 999;
 }
 
 h1 {
@@ -157,7 +164,7 @@ h1 {
 }
 
 @media(min-width:992px) {
-  .map {
+  #map {
     height: 70vh;
   }
 
