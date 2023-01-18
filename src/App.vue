@@ -1,9 +1,5 @@
 <script setup>
 import IpApiInput from './components/IpApiInput.vue'
-
-defineProps({
-  message: String,
-})
 </script>
 
 <template>

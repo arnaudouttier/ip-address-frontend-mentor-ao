@@ -1,63 +1,81 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer, LControlZoom } from "@vue-leaflet/vue-leaflet";
+import leaflet from "leaflet";
 
-let response = ref(null);
 let userIp = ref(null);
 let isValidIp = true;
-const ipv4Regex =
-  /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-const zoom = ref(4);
 let results = ref([]);
-let latlongitude = ref([10, 70]);
+let mymap;
+let resultsLocation = ref([]);
+let latitudeLongitude = ref([51.505, -0.09]);
+const zoom = ref(18);
 
-const fetchApiGeo = async () => {
-  isValidIp = ipv4Regex.test(userIp.value);
+onMounted(() => {
+  mymap = leaflet.map("idmap").setView(latitudeLongitude, 13);
+  leaflet
+    .tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+        id: "mapbox/streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+      }
+    )
+    .addTo(mymap);
+});
 
-  if (isValidIp) {
+const validIpAddress = (value) => {
+  isValidIp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(value);
+  return isValidIp
+}
+
+const fetchLocation = async () => {
+  if (validIpAddress(userIp.value)) {
     try {
-      response = await axios
-        .get(
-          `http://api.ipapi.com/api/${userIp.value}?access_key=0b10b1155ca8c14e4751b754089c54ce`
-        )
+      let response = await axios
+        .get(`http://api.ipapi.com/api/${userIp.value}?access_key=0b10b1155ca8c14e4751b754089c54ce`)
         .then((response) => {
           results = response.data;
-          latlongitude = [results.latitude, results.longitude];
+          resultsLocation = response.data.location
+          console.log(results);
+          latitudeLongitude = [results.latitude, results.longitude];
         });
-      console.log(results);
-    } catch (err) {
+      setTimeout(() => {
+        leaflet
+          .marker(latitudeLongitude)
+          .addTo(mymap);
+        mymap.setView(
+          latitudeLongitude,
+          13
+        );
+      }, 500);
+    }
+    catch (err) {
       console.error(err);
     }
   }
-
   userIp.value = "";
   userIp = ref(null);
 };
 </script>
 
 <template>
-  <div id="map">
-    <l-map ref="map" :options="{ zoomControl: false }" v-model:zoom="zoom" :center="[latlongitude[0], latlongitude[1]]">
-      <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
-        name="OpenStreetMap"></l-tile-layer>
-      <l-control-zoom position="bottomleft"></l-control-zoom>
-    </l-map>
+  <div id="idmap">
 
     <section class="api-input">
       <h1>IP Address Tracker</h1>
 
-      {{ userIp }}
-      {{ latlongitude[1] }}
-
       <span class="danger" v-if="!isValidIp">Please add a valid IP address</span>
 
       <div class="search">
-        <input type="text" @keyup.enter="fetchApiGeo" v-model="userIp" :class="{ warning: !isValidIp }"
+        <input type="text" @keyup.enter="fetchLocation" v-model="userIp" :class="{ warning: !isValidIp }"
           placeholder="Search for any IP address or domain" />
 
-        <button class="btn btn-search" :class="{ warning: !isValidIp }" @click="fetchApiGeo">
+        <button class="btn btn-search" :class="{ warning: !isValidIp }" @click="fetchLocation">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14">
             <path fill="none" stroke="#FFF" stroke-width="3" d="M2 1l6 6-6 6" />
           </svg>
@@ -65,7 +83,9 @@ const fetchApiGeo = async () => {
       </div>
       <!-- .search -->
 
-      <ul class="result">
+      {{ latitudeLongitude }}
+
+      <ul id="results">
         <li class="list-item">
           <h2 class="item-title">IP ADDRESS</h2>
           <h3 class="item-text">{{ results.ip }}</h3>
@@ -78,18 +98,19 @@ const fetchApiGeo = async () => {
         </li>
         <li class="list-item">
           <h2 class="item-title">TIMEZONE</h2>
-          <h3 class="item-text">{{ results.location }}</h3>
+          <h3 class="item-text">{{ resultsLocation.country_flag_emoji_unicode }}</h3>
         </li>
         <li class="list-item">
           <h2 class="item-title">ISP</h2>
           <h3 class="item-text">{{ results.continent_code }}</h3>
         </li>
       </ul>
-      <!-- .result -->
+      <!-- #results -->
+
     </section>
     <!-- .api-input -->
   </div>
-  <!-- #map -->
+  <!-- #idmap -->
 </template>
 
 <style scoped>
@@ -98,7 +119,7 @@ const fetchApiGeo = async () => {
   outline: 2px solid #cd0404;
 }
 
-#map {
+#idmap {
   height: 60vh;
   position: relative;
 }
@@ -128,7 +149,7 @@ h1 {
 
 .search {
   display: flex;
-  align-self: center;
+  align-self: latitudeLongitude;
   position: relative;
   width: 100%;
 }
@@ -149,7 +170,7 @@ h1 {
   border-radius: 0 0.6rem 0.6rem 0;
 }
 
-.result {
+#results {
   background-color: #fff;
   display: grid;
   grid-auto-flow: row;
@@ -159,7 +180,7 @@ h1 {
   padding-inline: 0;
 }
 
-.result .item-title {
+#results .item-title {
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--gray_100);
@@ -167,7 +188,7 @@ h1 {
 }
 
 @media (min-width: 992px) {
-  #map {
+  #idmap {
     height: 70vh;
   }
 
@@ -179,18 +200,18 @@ h1 {
     max-width: 560px;
   }
 
-  .result {
+  #results {
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     text-align: left;
     padding-block: 40px;
   }
 
-  .result .list-item {
+  #results .list-item {
     padding-inline: 30px 0;
   }
 
-  .result .list-item:not(:first-child) {
+  #results .list-item:not(:first-child) {
     border-left: 1px solid rgba(150, 150, 150, 0.31);
   }
 }
