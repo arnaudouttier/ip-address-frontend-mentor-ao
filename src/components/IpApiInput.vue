@@ -42,7 +42,7 @@ const fetchLocation = async () => {
         .then((response) => {
           results = response.data;
           resultsLocation = response.data.location
-          latitudeLongitude = [...results.latitude, results.longitude];
+          latitudeLongitude = [results.latitude, results.longitude]
         });
       setTimeout(() => {
         leaflet
@@ -107,7 +107,7 @@ const fetchLocation = async () => {
         </li>
         <li class=" list-item">
           <h2 class="item-title">TIMEZONE</h2>
-          <h3 v-if="isValidIp" class="item-text">{{ resultsLocation }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{ resultsLocation.country_flag_emoji_unicode }}</h3>
           <p v-if="!isLoading">...</p>
         </li>
         <li class=" list-item">
