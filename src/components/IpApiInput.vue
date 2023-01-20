@@ -59,6 +59,7 @@ const fetchLocation = async () => {
   else {
     isValidIp = ref(false)
     isLoading = ref(false)
+    alert("Please add a valid IP address")
   }
   userIp.value = "";
   userIp = ref(null);
@@ -72,8 +73,6 @@ const fetchLocation = async () => {
 
     <section class="search-box">
       <h1>IP Address Tracker</h1>
-
-      <span class="danger" v-if="!isValidIp">Please add a valid IP address</span>
 
       <div class="search">
         <input type="text" @keyup.enter="fetchLocation" v-model="userIp" :class="{ warning: !isValidIp }"
@@ -154,10 +153,6 @@ h1 {
   font-size: 1.7rem;
   color: #fff;
   margin-bottom: 10px;
-}
-
-.search-box .danger {
-  color: #cd0404;
 }
 
 .search {
