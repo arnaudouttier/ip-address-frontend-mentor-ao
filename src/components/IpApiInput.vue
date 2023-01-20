@@ -1,28 +1,25 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import axios from "axios";
 import leaflet from "leaflet";
 
 let userIp = ref(null);
-let isValidIp = true;
+let isValidIp = ref(true);
+let isLoading = false
 let results = ref([]);
 let mymap;
 let resultsLocation = ref([]);
 let latitudeLongitude = ref([51.505, -0.09]);
-const zoom = ref(18);
 
 onMounted(() => {
-  mymap = leaflet.map("idmap").setView(latitudeLongitude, 13);
+  mymap = leaflet.map("mymap").setView([51.505, -0.09], 13);
   leaflet
     .tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 18,
-        id: "mapbox/streets-v11",
-        tileSize: 512,
-        zoomOffset: -1,
+        maxZoom: 10,
       }
     )
     .addTo(mymap);
@@ -57,6 +54,11 @@ const fetchLocation = async () => {
     catch (err) {
       console.error(err);
     }
+    isLoading = ref(true)
+  }
+  else {
+    isValidIp = ref(false)
+    isLoading = ref(false)
   }
   userIp.value = "";
   userIp = ref(null);
@@ -64,9 +66,11 @@ const fetchLocation = async () => {
 </script>
 
 <template>
-  <div id="idmap">
+  <div class="map">
 
-    <section class="api-input">
+    <div id="mymap"></div>
+
+    <section class="search-box">
       <h1>IP Address Tracker</h1>
 
       <span class="danger" v-if="!isValidIp">Please add a valid IP address</span>
@@ -74,6 +78,7 @@ const fetchLocation = async () => {
       <div class="search">
         <input type="text" @keyup.enter="fetchLocation" v-model="userIp" :class="{ warning: !isValidIp }"
           placeholder="Search for any IP address or domain" />
+        <!-- .search -->
 
         <button class="btn btn-search" :class="{ warning: !isValidIp }" @click="fetchLocation">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14">
@@ -83,34 +88,36 @@ const fetchLocation = async () => {
       </div>
       <!-- .search -->
 
-      {{ latitudeLongitude }}
-
       <ul id="results">
         <li class="list-item">
           <h2 class="item-title">IP ADDRESS</h2>
-          <h3 class="item-text">{{ results.ip }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{ results.ip }}</h3>
+          <p v-if="!isLoading">...</p>
         </li>
-        <li class="list-item">
+        <li class=" list-item">
           <h2 class="item-title">LOCATION</h2>
-          <h3 class="item-text">
-            {{ results.city }} - {{ results.country_name }}
+          <h3 v-if="isValidIp" class="item-text">
+            {{ results.city }} {{ results.country_name }}
           </h3>
+          <p v-if="!isLoading">...</p>
         </li>
-        <li class="list-item">
+        <li class=" list-item">
           <h2 class="item-title">TIMEZONE</h2>
-          <h3 class="item-text">{{ resultsLocation.country_flag_emoji_unicode }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{ resultsLocation.country_flag_emoji_unicode }}</h3>
+          <p v-if="!isLoading">...</p>
         </li>
-        <li class="list-item">
+        <li class=" list-item">
           <h2 class="item-title">ISP</h2>
-          <h3 class="item-text">{{ results.continent_code }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{ results.continent_code }}</h3>
+          <p v-if="!isLoading">...</p>
         </li>
       </ul>
       <!-- #results -->
 
     </section>
-    <!-- .api-input -->
+    <!-- .search-box -->
   </div>
-  <!-- #idmap -->
+  <!-- .map -->
 </template>
 
 <style scoped>
@@ -119,12 +126,18 @@ const fetchLocation = async () => {
   outline: 2px solid #cd0404;
 }
 
-#idmap {
+.map {
   height: 60vh;
   position: relative;
 }
 
-.api-input {
+#mymap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.search-box {
   width: min(90vw, 1110px);
   margin-inline: auto;
   display: flex;
@@ -143,13 +156,13 @@ h1 {
   margin-bottom: 10px;
 }
 
-.api-input .danger {
+.search-box .danger {
   color: #cd0404;
 }
 
 .search {
   display: flex;
-  align-self: latitudeLongitude;
+  align-self: center;
   position: relative;
   width: 100%;
 }
@@ -188,11 +201,11 @@ h1 {
 }
 
 @media (min-width: 992px) {
-  #idmap {
+  .map {
     height: 70vh;
   }
 
-  .api-input {
+  .search-box {
     top: -36%;
   }
 

@@ -22,6 +22,8 @@ import IpApiInput from './components/IpApiInput.vue'
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  position: relative;
+  z-index: 99;
 }
 
 @media(min-width:992px) {
