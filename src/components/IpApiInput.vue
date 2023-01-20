@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import leaflet from "leaflet";
 
 let userIp = ref(null);
@@ -34,7 +33,6 @@ const validIpAddress = (value) => {
 
 const fetchLocation = async () => {
   if (validIpAddress(userIp.value)) {
-
     try {
       const response = await fetch(`https://ipwho.is/${userIp.value}`);
       const responseData = await response.json();
@@ -115,8 +113,6 @@ const fetchLocation = async () => {
           <p v-if="!isLoading">...</p>
         </li>
       </ul>
-      {{ results }}
-
       <!-- #results -->
 
     </section>
