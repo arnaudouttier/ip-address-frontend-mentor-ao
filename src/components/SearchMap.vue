@@ -82,7 +82,7 @@ const fetchLocation = async () => {
       <div class="search">
         <input type="text" @keyup.enter="fetchLocation" v-model="userIp" :class="{ warning: !isValidIp }"
           placeholder="Search for any IP address or domain" />
-        <!-- .search -->
+        <!-- .input search -->
 
         <button class="btn btn-search" :class="{ warning: !isValidIp }" @click="fetchLocation">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14">
@@ -90,7 +90,7 @@ const fetchLocation = async () => {
           </svg>
         </button>
       </div>
-      <!-- .search -->
+      <!-- .btn .search -->
 
       <ul id="results" :class="{ active: resultBoxOpacity }">
         <li class="list-item">

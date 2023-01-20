@@ -1,10 +1,10 @@
 <script setup>
-import IpApiInput from './components/IpApiInput.vue'
+import SearchMap from './components/SearchMap.vue'
 </script>
 
 <template>
   <div class="bg-top"></div>
-  <IpApiInput />
+  <SearchMap />
 </template>
 
 <style >
