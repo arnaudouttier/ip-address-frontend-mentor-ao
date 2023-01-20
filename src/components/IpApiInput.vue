@@ -10,7 +10,7 @@ let response = ref(null)
 let mymap;
 let results = ref([]);
 let resultsLocation = ref([]);
-let latitudeLongitude = ref([51.505, -0.09]);
+let latitudeLongitude = ref([]);
 
 onMounted(() => {
   mymap = leaflet.map("mymap")
