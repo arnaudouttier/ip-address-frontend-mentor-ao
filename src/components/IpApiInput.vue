@@ -20,7 +20,7 @@ onMounted(() => {
       {
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 10,
+        Zoom: 10,
       }
     )
     .addTo(mymap);
