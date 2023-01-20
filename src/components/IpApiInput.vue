@@ -13,14 +13,15 @@ let resultsLocation = ref([]);
 let latitudeLongitude = ref([51.505, -0.09]);
 
 onMounted(() => {
-  mymap = leaflet.map("mymap").setView([48.864716, 2.349014], 13);
+  mymap = leaflet.map("mymap")
+    .setView([48.864716, 2.349014], 13)
+    .setZoom(9);
   leaflet
     .tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        Zoom: 10,
       }
     )
     .addTo(mymap);
