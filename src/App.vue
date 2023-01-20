@@ -21,7 +21,7 @@ import IpApiInput from './components/IpApiInput.vue'
   background-image: url("assets/images/pattern-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: right;
   position: relative;
   z-index: 99;
 }

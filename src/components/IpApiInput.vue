@@ -5,14 +5,15 @@ import leaflet from "leaflet";
 
 let userIp = ref(null);
 let isValidIp = ref(true);
-let isLoading = false
-let results = ref([]);
+let isLoading = ref(false)
+let response = ref(null)
 let mymap;
+let results = ref([]);
 let resultsLocation = ref([]);
 let latitudeLongitude = ref([51.505, -0.09]);
 
 onMounted(() => {
-  mymap = leaflet.map("mymap").setView([51.505, -0.09], 13);
+  mymap = leaflet.map("mymap").setView([48.864716, 2.349014], 13);
   leaflet
     .tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -20,9 +21,12 @@ onMounted(() => {
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 10,
+        zoomControl: false
       }
     )
     .addTo(mymap);
+
+  mymap.zoomControl.setPosition('bottomright');
 });
 
 const validIpAddress = (value) => {
@@ -33,12 +37,11 @@ const validIpAddress = (value) => {
 const fetchLocation = async () => {
   if (validIpAddress(userIp.value)) {
     try {
-      let response = await axios
+      response = await axios
         .get(`http://api.ipapi.com/api/${userIp.value}?access_key=0b10b1155ca8c14e4751b754089c54ce`)
         .then((response) => {
           results = response.data;
           resultsLocation = response.data.location
-          console.log(results);
           latitudeLongitude = [results.latitude, results.longitude];
         });
       setTimeout(() => {
@@ -115,6 +118,7 @@ const fetchLocation = async () => {
 
     </section>
     <!-- .search-box -->
+
   </div>
   <!-- .map -->
 </template>
