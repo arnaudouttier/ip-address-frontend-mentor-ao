@@ -8,7 +8,7 @@ let isValidIp = ref(true);
 let isLoading = ref(false)
 let mymap;
 let results = ref([]);
-
+let resultsFlag = ref([]);
 
 onMounted(() => {
   mymap = leaflet.map("mymap")
@@ -36,10 +36,10 @@ const fetchLocation = async () => {
   if (validIpAddress(userIp.value)) {
 
     try {
-      const response = await fetch(`http://ipwho.is/${userIp.value}`);
+      const response = await fetch(`https://ipwho.is/${userIp.value}`);
       const responseData = await response.json();
-      console.log(responseData.latitude);
       results = responseData
+      resultsFlag = responseData.flag
 
       setTimeout(() => {
         leaflet
@@ -104,7 +104,9 @@ const fetchLocation = async () => {
         </li>
         <li class=" list-item">
           <h2 class="item-title">TIMEZONE</h2>
-          <h3 v-if="isValidIp" class="item-text">{{ results.flag.emoji_unicode }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{
+            resultsFlag.emoji_unicode
+          }}</h3>
           <p v-if="!isLoading">...</p>
         </li>
         <li class=" list-item">
