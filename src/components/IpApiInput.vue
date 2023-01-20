@@ -12,7 +12,7 @@ let resultsFlag = ref([]);
 onMounted(() => {
   mymap = leaflet.map("mymap")
     .setView([48.864716, 2.349014], 13)
-    .setZoom(9);
+    .setZoom(5);
   leaflet
     .tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -43,10 +43,12 @@ const fetchLocation = async () => {
         leaflet
           .marker([responseData.latitude, responseData.longitude])
           .addTo(mymap);
-        mymap.setView(
-          [responseData.latitude, responseData.longitude],
-          13
-        );
+        mymap
+          .setView(
+            [responseData.latitude, responseData.longitude],
+            13
+          )
+          .setZoom(5);
       }, 500);
     }
     catch (err) {
