@@ -8,6 +8,7 @@ let isLoading = ref(false)
 let mymap;
 let results = ref([]);
 let resultsFlag = ref([]);
+let resultBoxOpacity = ref(false)
 
 onMounted(() => {
   mymap = leaflet.map("mymap")
@@ -55,10 +56,12 @@ const fetchLocation = async () => {
       console.error(err);
     }
     isLoading = ref(true)
+    resultBoxOpacity = ref(true)
   }
   else {
     isValidIp = ref(false)
     isLoading = ref(false)
+    resultBoxOpacity = ref(false)
     alert("Please add a valid IP address")
   }
   userIp.value = "";
@@ -89,7 +92,7 @@ const fetchLocation = async () => {
       </div>
       <!-- .search -->
 
-      <ul id="results">
+      <ul id="results" :class="{ active: resultBoxOpacity }">
         <li class="list-item">
           <h2 class="item-title">IP ADDRESS</h2>
           <h3 v-if="isValidIp" class="item-text">{{ results.ip }}</h3>
@@ -184,13 +187,17 @@ h1 {
 }
 
 #results {
-  background-color: #fff;
+  background-color: #ffffff;
   display: grid;
   grid-auto-flow: row;
   gap: 25px;
   border-radius: 1rem;
   padding-block: 20px 30px;
   padding-inline: 0;
+}
+
+#results.active {
+  background-color: hsla(0, 0%, 100%, 0.85);
 }
 
 #results .item-title {
@@ -220,6 +227,11 @@ h1 {
     text-align: left;
     padding-block: 40px;
   }
+
+  #results.active {
+    background-color: #ffffff
+  }
+
 
   #results .list-item {
     padding-inline: 30px 0;
