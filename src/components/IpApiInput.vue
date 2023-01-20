@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import leaflet from "leaflet";
 
@@ -21,7 +21,6 @@ onMounted(() => {
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 10,
-        zoomControl: false
       }
     )
     .addTo(mymap);
@@ -67,6 +66,7 @@ const fetchLocation = async () => {
   userIp.value = "";
   userIp = ref(null);
 };
+
 </script>
 
 <template>
@@ -75,6 +75,7 @@ const fetchLocation = async () => {
     <div id="mymap"></div>
 
     <section class="search-box">
+
       <h1>IP Address Tracker</h1>
 
       <div class="search">
@@ -205,11 +206,12 @@ h1 {
   }
 
   .search-box {
-    top: -36%;
+    top: -42%;
   }
 
   .search {
     max-width: 560px;
+    margin-bottom: 2rem;
   }
 
   #results {
