@@ -6,11 +6,9 @@ import leaflet from "leaflet";
 let userIp = ref(null);
 let isValidIp = ref(true);
 let isLoading = ref(false)
-let response = ref(null)
 let mymap;
 let results = ref([]);
-let resultsLocation = ref([]);
-let latitudeLongitude = ref([]);
+
 
 onMounted(() => {
   mymap = leaflet.map("mymap")
@@ -36,20 +34,19 @@ const validIpAddress = (value) => {
 
 const fetchLocation = async () => {
   if (validIpAddress(userIp.value)) {
+
     try {
-      response = await axios
-        .get(`http://api.ipapi.com/api/${userIp.value}?access_key=0b10b1155ca8c14e4751b754089c54ce`)
-        .then((response) => {
-          results = response.data;
-          resultsLocation = response.data.location
-          latitudeLongitude = [results.latitude, results.longitude]
-        });
+      const response = await fetch(`http://ipwho.is/${userIp.value}`);
+      const responseData = await response.json();
+      console.log(responseData.latitude);
+      results = responseData
+
       setTimeout(() => {
         leaflet
-          .marker(latitudeLongitude)
+          .marker([responseData.latitude, responseData.longitude])
           .addTo(mymap);
         mymap.setView(
-          latitudeLongitude,
+          [responseData.latitude, responseData.longitude],
           13
         );
       }, 500);
@@ -101,21 +98,23 @@ const fetchLocation = async () => {
         <li class=" list-item">
           <h2 class="item-title">LOCATION</h2>
           <h3 v-if="isValidIp" class="item-text">
-            {{ results.city }} {{ results.country_name }}
+            {{ results.city }} {{ results.city }}
           </h3>
           <p v-if="!isLoading">...</p>
         </li>
         <li class=" list-item">
           <h2 class="item-title">TIMEZONE</h2>
-          <h3 v-if="isValidIp" class="item-text">{{ resultsLocation.country_flag_emoji_unicode }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{ results.flag.emoji_unicode }}</h3>
           <p v-if="!isLoading">...</p>
         </li>
         <li class=" list-item">
           <h2 class="item-title">ISP</h2>
-          <h3 v-if="isValidIp" class="item-text">{{ results.continent_code }}</h3>
+          <h3 v-if="isValidIp" class="item-text">{{ results.country_code }}</h3>
           <p v-if="!isLoading">...</p>
         </li>
       </ul>
+      {{ results }}
+
       <!-- #results -->
 
     </section>
