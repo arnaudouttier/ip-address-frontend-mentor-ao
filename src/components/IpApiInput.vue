@@ -42,7 +42,7 @@ const fetchLocation = async () => {
         .then((response) => {
           results = response.data;
           resultsLocation = response.data.location
-          latitudeLongitude = [results.latitude, results.longitude];
+          latitudeLongitude = [...results.latitude, results.longitude];
         });
       setTimeout(() => {
         leaflet
