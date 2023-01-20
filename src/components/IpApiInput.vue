@@ -131,7 +131,7 @@ const fetchLocation = async () => {
 }
 
 .map {
-  height: 60vh;
+  height: 60%;
   position: relative;
 }
 
@@ -202,7 +202,7 @@ h1 {
 
 @media (min-width: 992px) {
   .map {
-    height: 70vh;
+    height: 70%;
   }
 
   .search-box {

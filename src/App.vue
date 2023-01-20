@@ -10,14 +10,14 @@ import IpApiInput from './components/IpApiInput.vue'
 <style >
 #app {
   width: 100vw;
-  height: 100vh;
+  height: inherit;
   margin: 0;
   padding: 0;
   text-align: center;
 }
 
 .bg-top {
-  height: 40vh;
+  height: 40%;
   background-image: url("assets/images/pattern-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -28,7 +28,7 @@ import IpApiInput from './components/IpApiInput.vue'
 
 @media(min-width:992px) {
   .bg-top {
-    height: 30vh;
+    height: 30%;
   }
 }
 </style>
